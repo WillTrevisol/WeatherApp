@@ -1,4 +1,3 @@
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -17,11 +16,7 @@ abstract class _LocationStoreBase with Store {
   final ConnectivityStore connectivity = GetIt.I.get<ConnectivityStore>();
 
   _LocationStoreBase() {
-    autorun((_) async {
-      if (connectivity.connected) {
-        getLocation();
-      }
-    });
+    _getLocation();
   }
 
   @observable
@@ -30,29 +25,27 @@ abstract class _LocationStoreBase with Store {
   @action
   void setLocatioStatus(LocationStatus value) => locationStatus = value;
 
-  Future<void> getLocation() async {
+  @observable
+  Position? position;
+
+  @action
+  void setPosition(Position value) => position = value;
+
+  Future<void> _getLocation() async {
     Geolocator.checkPermission().then(
       (value) async {
         await Geolocator.requestPermission();
 
         if (value == LocationPermission.whileInUse || value == LocationPermission.always) {
+          setLocatioStatus(LocationStatus.init);
 
           Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high
           );
 
-          final List<Placemark> places = await placemarkFromCoordinates(
-            position.latitude,
-            position.longitude,
-            localeIdentifier: 'pt_BR',
-          );
+          setPosition(position);
 
-          Placemark placemark = places.first;
-
-          print(placemark.country);
-          print(placemark.administrativeArea);
-          print(placemark.subAdministrativeArea);
-          print(placemark.locality);
+          setLocatioStatus(LocationStatus.done);
         }
       }
     );

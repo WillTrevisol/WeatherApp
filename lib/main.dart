@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import 'stores/connectivity_store.dart';
 import 'stores/location_store.dart';
+import 'stores/weather_store.dart';
 
 
 void main() {
@@ -15,6 +16,7 @@ void main() {
 void _registerInstances() {
   GetIt.I.registerSingleton(ConnectivityStore());
   GetIt.I.registerSingleton(LocationStore());
+  GetIt.I.registerSingleton(WeatherStore());
 }
 
 class WeatherApp extends StatelessWidget {
@@ -32,8 +34,16 @@ class WeatherApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  final controller = GetIt.I.get<WeatherStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +53,22 @@ class HomePage extends StatelessWidget {
       ),
       body: Observer(
         builder: (BuildContext context) {
-          return Center(child: Text('${GetIt.I.get<ConnectivityStore>().connected}'));
+          
+          if (controller.loading || controller.weather == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (controller.error != null) {
+            return Center(
+              child: Text(controller.error),
+            );
+          }
+
+          return Center(
+            child: Text(
+              controller.weather!.city
+            ),
+          );
         },
       ),
     );
