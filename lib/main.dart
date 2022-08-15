@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import 'screens/home/home_screen.dart';
 import 'stores/connectivity_store.dart';
 import 'stores/location_store.dart';
 import 'stores/weather_store.dart';
@@ -28,49 +29,34 @@ class WeatherApp extends StatelessWidget {
       title: 'WeatherApp',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          headline1: TextStyle(
+            color: Colors.white,
+            fontSize: 84,
+            fontWeight: FontWeight.w300
+          ),
+          headline2: TextStyle(
+
+          ),
+          headline3: TextStyle(
+
+          ),
+          headline4: TextStyle(
+
+          ),
+          headline5: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w300,
+            fontSize: 28,
+          ),
+          headline6: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 22,
+          ),
+        ),
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-
-  final controller = GetIt.I.get<WeatherStore>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('WeatherApp'),
-      ),
-      body: Observer(
-        builder: (BuildContext context) {
-          
-          if (controller.loading || controller.weather == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (controller.error != null) {
-            return Center(
-              child: Text(controller.error),
-            );
-          }
-
-          return Center(
-            child: Text(
-              controller.weather!.city
-            ),
-          );
-        },
-      ),
+      home: HomeScreen(),
     );
   }
 }
