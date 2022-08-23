@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../stores/weather_store.dart';
+import '../location_screen/location_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -58,7 +59,11 @@ class HomeScreen extends StatelessWidget {
                             Icons.settings,
                             color: Colors.white,
                           ), 
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => LocationScreen())
+                            );
+                          },
                         ),
                         Text(
                           controller.weather!.city,
