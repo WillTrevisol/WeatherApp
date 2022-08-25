@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../stores/weather_store.dart';
@@ -15,16 +16,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
+      top: true,
       child: Scaffold(
         body: Container(
           constraints: const BoxConstraints.expand(),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/So Hot.png'),
-            ),
-          ),
+          color: Colors.black,
           child: Observer(
             builder: (_) {
               if (controller.loading && controller.weather == null) {
@@ -49,6 +45,11 @@ class HomeScreen extends StatelessWidget {
                 return Stack(
                   alignment: Alignment.center,
                   children: <Widget> [
+                    WeatherBg(
+                      weatherType: WeatherType.foggy, 
+                      width: MediaQuery.of(context).size.width, 
+                      height: MediaQuery.of(context).size.height,
+                    ),
                     Positioned(
                       top: 50,
                       right: 10,
