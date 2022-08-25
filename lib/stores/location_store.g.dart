@@ -160,6 +160,22 @@ mixin _$LocationStore on _LocationStoreBase, Store {
     });
   }
 
+  late final _$userLocationsAtom =
+      Atom(name: '_LocationStoreBase.userLocations', context: context);
+
+  @override
+  ObservableList<UserLocation> get userLocations {
+    _$userLocationsAtom.reportRead();
+    return super.userLocations;
+  }
+
+  @override
+  set userLocations(ObservableList<UserLocation> value) {
+    _$userLocationsAtom.reportWrite(value, super.userLocations, () {
+      super.userLocations = value;
+    });
+  }
+
   late final _$getUfListAsyncAction =
       AsyncAction('_LocationStoreBase.getUfList', context: context);
 
@@ -174,6 +190,14 @@ mixin _$LocationStore on _LocationStoreBase, Store {
   @override
   Future<void> getCityList(UF uf) {
     return _$getCityListAsyncAction.run(() => super.getCityList(uf));
+  }
+
+  late final _$getUserLocationsAsyncAction =
+      AsyncAction('_LocationStoreBase.getUserLocations', context: context);
+
+  @override
+  Future<void> getUserLocations() {
+    return _$getUserLocationsAsyncAction.run(() => super.getUserLocations());
   }
 
   late final _$_LocationStoreBaseActionController =
@@ -257,6 +281,28 @@ mixin _$LocationStore on _LocationStoreBase, Store {
   }
 
   @override
+  void addUserLocationToList() {
+    final _$actionInfo = _$_LocationStoreBaseActionController.startAction(
+        name: '_LocationStoreBase.addUserLocationToList');
+    try {
+      return super.addUserLocationToList();
+    } finally {
+      _$_LocationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeUserLocationFromList(UserLocation userLocation) {
+    final _$actionInfo = _$_LocationStoreBaseActionController.startAction(
+        name: '_LocationStoreBase.removeUserLocationFromList');
+    try {
+      return super.removeUserLocationFromList(userLocation);
+    } finally {
+      _$_LocationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 locationStatus: ${locationStatus},
@@ -268,6 +314,7 @@ error: ${error},
 filter: ${filter},
 uf: ${uf},
 city: ${city},
+userLocations: ${userLocations},
 cityFiltered: ${cityFiltered}
     ''';
   }

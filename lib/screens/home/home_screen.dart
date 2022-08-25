@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../stores/weather_store.dart';
-import '../location_screen/location_screen.dart';
+import '../my_locations/my_locations.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Observer(
             builder: (_) {
-              if (controller.loading || controller.weather == null) {
+              if (controller.loading && controller.weather == null) {
                 return const Center(
                   child: SpinKitFadingCube(
                     color: Colors.white,
@@ -61,15 +62,15 @@ class HomeScreen extends StatelessWidget {
                           ), 
                           onPressed: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => LocationScreen(),
+                              CupertinoPageRoute(
+                                builder: (_) => MyLocationsScreen(),
                               ),
                             );
                           },
                         ),
                         Text(
                           controller.weather!.city,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headline5,
                         ),
                         IconButton(
                           icon: const Icon(

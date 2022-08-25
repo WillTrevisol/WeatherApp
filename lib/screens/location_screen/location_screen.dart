@@ -20,10 +20,10 @@ class LocationScreen extends StatelessWidget {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: CupertinoColors.black,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.black,
+          backgroundColor: CupertinoColors.black,
         ),
         body: Observer(
           builder: (_) {
@@ -63,7 +63,9 @@ class LocationScreen extends StatelessWidget {
                     if (controller.cityFiltered.isEmpty) {
                       return Center(
                         child: Text(
-                          'Nenhuma cidade encontrada.',
+                          controller.uf == null 
+                          ? 'Selecione um estado.'
+                          : 'Nenhuma cidade encontrada.',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       );
@@ -88,7 +90,8 @@ class LocationScreen extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(24)), 
                     onPressed: controller.city != null 
                       ? () {
-                        GetIt.I.get<WeatherStore>().getWeatherByCityUf(controller.uf!, controller.city!);
+                        controller.addUserLocationToList();
+                        controller.saveUserLocations();
                         Navigator.of(context).pop();
                       } 
                       : null,

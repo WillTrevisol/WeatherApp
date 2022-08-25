@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -28,10 +29,16 @@ class WeatherApp extends StatelessWidget {
     return MaterialApp(
       title: 'WeatherApp',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          color: CupertinoColors.black,
+          elevation: 0,
+        ),
+        scaffoldBackgroundColor: CupertinoColors.black,
         primarySwatch: Colors.purple,
         textTheme: const TextTheme(
           headline1: TextStyle(
-            color: Colors.white,
+            color: CupertinoColors.white,
             fontSize: 84,
             fontWeight: FontWeight.w300
           ),
@@ -45,12 +52,12 @@ class WeatherApp extends StatelessWidget {
 
           ),
           headline5: TextStyle(
-            color: Colors.white,
+            color: CupertinoColors.white,
             fontWeight: FontWeight.w300,
             fontSize: 28,
           ),
           headline6: TextStyle(
-            color: Colors.white,
+            color: CupertinoColors.white,
             fontWeight: FontWeight.w400,
             fontSize: 22,
           ),

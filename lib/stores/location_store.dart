@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../entities/city.dart';
 import '../entities/uf.dart';
+import '../entities/user_location.dart';
 import '../repositories/ibge_repostory.dart';
 import 'connectivity_store.dart';
 
 part 'location_store.g.dart';
 
 enum LocationStatus { init, failed, done }
+const userLocationKey = 'userLocationsKey';
 
 // ignore: library_private_types_in_public_api
 class LocationStore = _LocationStoreBase with _$LocationStore;
@@ -17,10 +22,13 @@ class LocationStore = _LocationStoreBase with _$LocationStore;
 abstract class _LocationStoreBase with Store {
 
   final ConnectivityStore connectivity = GetIt.I.get<ConnectivityStore>();
+  late SharedPreferences? sharedPreferences;
 
   _LocationStoreBase() {
     _getLocation();
     getUfList();
+    SharedPreferences.getInstance().then((value) => sharedPreferences = value);
+    getUserLocations();
   }
 
   @observable
@@ -132,4 +140,32 @@ abstract class _LocationStoreBase with Store {
 
   @action
   void setCity(City value) => city = value;
+
+  @observable
+  ObservableList<UserLocation> userLocations = ObservableList<UserLocation>();
+
+  @action
+  void addUserLocationToList() {
+    userLocations.add(
+      UserLocation(uf: uf!, city: city!)
+    );
+  }
+
+  @action
+  void removeUserLocationFromList(UserLocation userLocation) {
+    userLocations.remove(userLocation);
+    saveUserLocations();
+  }
+
+  @action
+  Future<void> getUserLocations() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    final List jsonDecoded = jsonDecode(sharedPreferences!.getString(userLocationKey) ?? '[]');
+    userLocations.addAll(jsonDecoded.map((e) => UserLocation.fromJson(e)).toList());
+  }
+
+  Future<void> saveUserLocations() async {
+    final userLocationJson = jsonEncode(userLocations);
+    sharedPreferences?.setString(userLocationKey, userLocationJson);
+  }
 }
