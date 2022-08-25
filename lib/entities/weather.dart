@@ -46,6 +46,22 @@ class Weather {
     conditionSlug: data['condition_slug'],
   );
 
+  Map<String, dynamic> toJson() => {
+    'temp': temperature,
+    'date': date,
+    'time': time,
+    'condition_code': conditionCode,
+    'description': description,
+    'currently': currently,
+    'city': city,
+    'city_name': cityName,
+    'humidity': humidity,
+    'wind_speedy': windSpeedy,
+    'sunrise': sunrise,
+    'sunset': sunset,
+    'condition_slug': conditionSlug,
+  };
+
   @override
   String toString() {
     return '''

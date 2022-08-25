@@ -21,8 +21,9 @@ class HomeScreen extends StatelessWidget {
           constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
             image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/So Hot.png')),
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/So Hot.png'),
+            ),
           ),
           child: Observer(
             builder: (_) {
@@ -44,60 +45,63 @@ class HomeScreen extends StatelessWidget {
                 );
               }
 
-
-              return Stack(
-                alignment: Alignment.center,
-                children: <Widget> [
-                  Positioned(
-                    top: 50,
-                    right: 10,
-                    left: 10,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              if (controller.weather != null) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: <Widget> [
+                    Positioned(
+                      top: 50,
+                      right: 10,
+                      left: 10,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget> [
+                          IconButton(
+                            icon: const Icon(
+                              CupertinoIcons.location_solid,
+                              color: Colors.white,
+                            ), 
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                  builder: (_) => MyLocationsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          Text(
+                            controller.weather!.city,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              CupertinoIcons.refresh_bold,
+                              color: Colors.white,
+                            ), 
+                            onPressed: () {},
+                          ),
+                        ],
+                      )
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget> [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.location_pin,
-                            color: Colors.white,
-                          ), 
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                builder: (_) => MyLocationsScreen(),
-                              ),
-                            );
-                          },
+                        Text(
+                          '${controller.weather!.temperature}º',
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                         Text(
-                          controller.weather!.city,
+                          controller.weather!.description,
                           style: Theme.of(context).textTheme.headline5,
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ), 
-                          onPressed: () {},
-                        ),
                       ],
-                    )
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget> [
-                      Text(
-                        '${controller.weather!.temperature}º',
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      Text(
-                        controller.weather!.description,
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    ],
-                  ),
-                ],
-              );
+                    ),
+                  ],
+                );
+              }
+              
+              return Container();
             },
           ),
         ),

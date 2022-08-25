@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
 import 'screens/home/home_screen.dart';
@@ -36,11 +35,15 @@ class WeatherApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: CupertinoColors.black,
         primarySwatch: Colors.purple,
+        cardTheme: const CardTheme(
+          elevation: 0,
+          color: CupertinoColors.systemGrey2,
+        ),
         textTheme: const TextTheme(
           headline1: TextStyle(
             color: CupertinoColors.white,
             fontSize: 84,
-            fontWeight: FontWeight.w300
+            fontWeight: FontWeight.w300,
           ),
           headline2: TextStyle(
 

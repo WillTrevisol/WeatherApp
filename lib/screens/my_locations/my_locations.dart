@@ -41,14 +41,49 @@ class MyLocationsScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: controller.userLocations.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(
-                  controller.userLocations[index].city.name,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                trailing: const Icon(
-                  CupertinoIcons.location_circle_fill,
-                  color: CupertinoColors.white,
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: ListTile(
+                  title: Text(
+                    controller.userLocations[index].city.name,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  trailing: const Icon(
+                    CupertinoIcons.location_solid,
+                    color: CupertinoColors.white,
+                  ),
+                  onLongPress: () {
+                    showCupertinoModalPopup(
+                      context: context, 
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: const Text('Atenção'),
+                          content: Text(
+                            'Deseja excluir a localização ${controller.userLocations[index].city.name}?'
+                          ),
+                          actions: <Widget> [
+                            CupertinoActionSheetAction(
+                              isDestructiveAction: true,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                            CupertinoActionSheetAction(
+                              onPressed: () {
+                                controller.removeUserLocationFromList(
+                                  controller.userLocations[index],
+                                );
+                                controller.saveUserLocations();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Confirmar'),
+                            ),
+                          ],
+                        );
+                      }
+                    );
+                  },
                 ),
               );
             }
