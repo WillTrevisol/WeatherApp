@@ -56,12 +56,14 @@ class HomeScreen extends StatelessWidget {
                       children: <Widget> [
                         IconButton(
                           icon: const Icon(
-                            Icons.settings,
+                            Icons.location_pin,
                             color: Colors.white,
                           ), 
                           onPressed: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => LocationScreen())
+                              MaterialPageRoute(
+                                builder: (_) => LocationScreen(),
+                              ),
                             );
                           },
                         ),

@@ -28,7 +28,7 @@ class WeatherApp extends StatelessWidget {
     return MaterialApp(
       title: 'WeatherApp',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
         textTheme: const TextTheme(
           headline1: TextStyle(
             color: Colors.white,

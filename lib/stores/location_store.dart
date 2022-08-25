@@ -2,6 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
+import '../entities/city.dart';
 import '../entities/uf.dart';
 import '../repositories/ibge_repostory.dart';
 import 'connectivity_store.dart';
@@ -74,6 +75,27 @@ abstract class _LocationStoreBase with Store {
   }
 
   @observable
+  ObservableList<City> cityList = ObservableList<City>();
+
+  @action
+  Future<void> getCityList(UF uf) async {
+    setLoading(true);
+    setError(null);
+    cityList.clear();
+
+    try {
+      final response = await IbgeRepository().getCityList(uf);
+
+      if (response != null) {
+        cityList.addAll(response);
+      }
+    } catch (e) {
+      setError(e);
+    }
+    setLoading(false);
+  }
+
+  @observable
   bool loading = false;
 
   @action
@@ -92,10 +114,22 @@ abstract class _LocationStoreBase with Store {
   void setFilter(String value) => filter = value;
 
   @computed
-  List<UF> get ufFiltered {
+  List<City> get cityFiltered {
     if (filter.isEmpty) {
-      return ufList;
+      return cityList;
     }
-    return ufList.where((uf) => uf.name.toLowerCase().contains(filter.toLowerCase())).toList();
+    return cityList.where((uf) => uf.name.toLowerCase().contains(filter.toLowerCase())).toList();
   }
+
+  @observable
+  UF? uf;
+
+  @action
+  void setUf(UF value) => uf = value;
+
+  @observable
+  City? city;
+
+  @action
+  void setCity(City value) => city = value;
 }

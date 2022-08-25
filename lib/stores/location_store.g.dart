@@ -9,12 +9,12 @@ part of 'location_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$LocationStore on _LocationStoreBase, Store {
-  Computed<List<UF>>? _$ufFilteredComputed;
+  Computed<List<City>>? _$cityFilteredComputed;
 
   @override
-  List<UF> get ufFiltered =>
-      (_$ufFilteredComputed ??= Computed<List<UF>>(() => super.ufFiltered,
-              name: '_LocationStoreBase.ufFiltered'))
+  List<City> get cityFiltered =>
+      (_$cityFilteredComputed ??= Computed<List<City>>(() => super.cityFiltered,
+              name: '_LocationStoreBase.cityFiltered'))
           .value;
 
   late final _$locationStatusAtom =
@@ -62,6 +62,22 @@ mixin _$LocationStore on _LocationStoreBase, Store {
   set ufList(ObservableList<UF> value) {
     _$ufListAtom.reportWrite(value, super.ufList, () {
       super.ufList = value;
+    });
+  }
+
+  late final _$cityListAtom =
+      Atom(name: '_LocationStoreBase.cityList', context: context);
+
+  @override
+  ObservableList<City> get cityList {
+    _$cityListAtom.reportRead();
+    return super.cityList;
+  }
+
+  @override
+  set cityList(ObservableList<City> value) {
+    _$cityListAtom.reportWrite(value, super.cityList, () {
+      super.cityList = value;
     });
   }
 
@@ -113,12 +129,51 @@ mixin _$LocationStore on _LocationStoreBase, Store {
     });
   }
 
+  late final _$ufAtom = Atom(name: '_LocationStoreBase.uf', context: context);
+
+  @override
+  UF? get uf {
+    _$ufAtom.reportRead();
+    return super.uf;
+  }
+
+  @override
+  set uf(UF? value) {
+    _$ufAtom.reportWrite(value, super.uf, () {
+      super.uf = value;
+    });
+  }
+
+  late final _$cityAtom =
+      Atom(name: '_LocationStoreBase.city', context: context);
+
+  @override
+  City? get city {
+    _$cityAtom.reportRead();
+    return super.city;
+  }
+
+  @override
+  set city(City? value) {
+    _$cityAtom.reportWrite(value, super.city, () {
+      super.city = value;
+    });
+  }
+
   late final _$getUfListAsyncAction =
       AsyncAction('_LocationStoreBase.getUfList', context: context);
 
   @override
   Future<void> getUfList() {
     return _$getUfListAsyncAction.run(() => super.getUfList());
+  }
+
+  late final _$getCityListAsyncAction =
+      AsyncAction('_LocationStoreBase.getCityList', context: context);
+
+  @override
+  Future<void> getCityList(UF uf) {
+    return _$getCityListAsyncAction.run(() => super.getCityList(uf));
   }
 
   late final _$_LocationStoreBaseActionController =
@@ -180,15 +235,40 @@ mixin _$LocationStore on _LocationStoreBase, Store {
   }
 
   @override
+  void setUf(UF value) {
+    final _$actionInfo = _$_LocationStoreBaseActionController.startAction(
+        name: '_LocationStoreBase.setUf');
+    try {
+      return super.setUf(value);
+    } finally {
+      _$_LocationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCity(City value) {
+    final _$actionInfo = _$_LocationStoreBaseActionController.startAction(
+        name: '_LocationStoreBase.setCity');
+    try {
+      return super.setCity(value);
+    } finally {
+      _$_LocationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 locationStatus: ${locationStatus},
 position: ${position},
 ufList: ${ufList},
+cityList: ${cityList},
 loading: ${loading},
 error: ${error},
 filter: ${filter},
-ufFiltered: ${ufFiltered}
+uf: ${uf},
+city: ${city},
+cityFiltered: ${cityFiltered}
     ''';
   }
 }

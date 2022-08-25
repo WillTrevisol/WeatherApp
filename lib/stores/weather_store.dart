@@ -2,6 +2,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
+import '../entities/city.dart';
+import '../entities/uf.dart';
 import '../entities/weather.dart';
 import '../repositories/weather_repository.dart';
 import 'location_store.dart';
@@ -46,6 +48,22 @@ abstract class _WeatherStoreBase with Store {
     try {
       setLoading(true);
       final weather = await WeatherRepository().getWeatherbyGps(position);
+
+      if (weather != null) {
+        setWeather(weather);
+      }
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> getWeatherByCityUf(UF uf, City city) async {
+    setError(null);
+    try {
+      setLoading(true);
+      final weather = await WeatherRepository().getWeatherbyCityUf(uf: uf, city: city);
 
       if (weather != null) {
         setWeather(weather);

@@ -1,6 +1,6 @@
 class City {
 
-  String id;
+  int id;
   String name;
 
   City({required this.id, required this.name});
