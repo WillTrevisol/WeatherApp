@@ -35,9 +35,9 @@ class WeatherApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: CupertinoColors.black,
         primarySwatch: Colors.purple,
-        cardTheme: const CardTheme(
+        cardTheme: CardTheme(
           elevation: 0,
-          color: CupertinoColors.systemGrey2,
+          color: Colors.grey.withAlpha(150),
         ),
         textTheme: const TextTheme(
           headline1: TextStyle(

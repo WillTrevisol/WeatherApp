@@ -17,8 +17,9 @@ class SearchField extends StatelessWidget {
         if (controller.cityList.isNotEmpty) {
           return SizedBox(
             width: size.width * 0.8,
-            child: CupertinoTextField(
+            child: CupertinoTextFormFieldRow(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              initialValue: controller.filter,
               placeholder: 'Pesquise sua cidade',
               decoration: const BoxDecoration(
                 color: CupertinoColors.white,
@@ -26,18 +27,19 @@ class SearchField extends StatelessWidget {
                   Radius.circular(24),
                 ),
               ),
-              suffix: const Padding(
+              prefix: const Padding(
                 padding: EdgeInsets.only(right: 8),
                 child: Icon(
-                  CupertinoIcons.location,
-                  color: CupertinoColors.systemGrey,
+                  CupertinoIcons.search,
+                  color: CupertinoColors.white,
                 ),
               ),
-              onChanged: controller.setFilter,
+              onChanged: (value) {
+                controller.setFilter(value);
+              },
             ),
           );
         }
-
         return Container();
       }
     );

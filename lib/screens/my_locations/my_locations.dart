@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../entities/user_location.dart';
 import '../../stores/location_store.dart';
 import '../location_screen/location_screen.dart';
+import 'widgets/location_tile.dart';
 
 class MyLocationsScreen extends StatelessWidget {
   MyLocationsScreen({Key? key}) : super(key: key);
@@ -43,54 +45,47 @@ class MyLocationsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: ListTile(
-                  title: Text(
-                    controller.userLocations[index].city.name,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  trailing: const Icon(
-                    CupertinoIcons.location_solid,
-                    color: CupertinoColors.white,
-                  ),
-                  onLongPress: () {
-                    showCupertinoModalPopup(
-                      context: context, 
-                      builder: (context) {
-                        return CupertinoAlertDialog(
-                          title: const Text('Atenção'),
-                          content: Text(
-                            'Deseja excluir a localização ${controller.userLocations[index].city.name}?'
-                          ),
-                          actions: <Widget> [
-                            CupertinoActionSheetAction(
-                              isDestructiveAction: true,
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Cancelar'),
-                            ),
-                            CupertinoActionSheetAction(
-                              onPressed: () {
-                                controller.removeUserLocationFromList(
-                                  controller.userLocations[index],
-                                );
-                                controller.saveUserLocations();
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Confirmar'),
-                            ),
-                          ],
-                        );
-                      }
-                    );
-                  },
+                child: LocationTile(
+                  userLocation: controller.userLocations[index],
+                  onLongPress: () => _showDeleteDialog(context, controller.userLocations[index]), 
+                  onTap: () {  },
                 ),
               );
             }
           );
-
-        }
+        },
       ),
+    );
+  }
+
+  Future<void> _showDeleteDialog(context, UserLocation userLocation) {
+    return showCupertinoModalPopup(
+      context: context, 
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: const Text('Atenção'),
+          content: Text(
+            'Deseja excluir a localização ${userLocation.city.name}?'
+          ),
+          actions: <Widget> [
+            CupertinoActionSheetAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                controller.removeUserLocationFromList(userLocation);
+                controller.saveUserLocations();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      }
     );
   }
 }

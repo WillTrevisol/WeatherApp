@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../stores/location_store.dart';
-import '../../stores/weather_store.dart';
 import 'widgets/city_picker.dart';
 import 'widgets/search_field.dart';
 
@@ -43,7 +42,7 @@ class LocationScreen extends StatelessWidget {
                     color: Colors.purple,
                     borderRadius: const BorderRadius.all(Radius.circular(24)), 
                     onPressed: () {
-                      showBottonSheet(context, size);
+                      _showBottonSheet(context, size);
                     },
                     child: Text(controller.uf == null ? 'Selecionar Estado' : controller.uf!.name)
                   ),
@@ -106,17 +105,22 @@ class LocationScreen extends StatelessWidget {
     );
   }
 
-  Future<void> showBottonSheet(BuildContext context, Size size) async {
+  Future<void> _showBottonSheet(BuildContext context, Size size) async {
     showModalBottomSheet(
+      isDismissible: false,
       elevation: 0,
       backgroundColor: CupertinoColors.systemGrey,
-      context: context, 
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24)
+      ),
       builder: (_) {
         return SizedBox(
           height: size.height * 0.3,
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
+              controller.getCityList(controller.uf!);
             },
             child: CupertinoPicker.builder(
               childCount: controller.ufList.length,
@@ -127,7 +131,6 @@ class LocationScreen extends StatelessWidget {
               useMagnifier: true, 
               onSelectedItemChanged: (int index) {
                 controller.setUf(controller.ufList[index]);
-                controller.getCityList(controller.uf!);
               },
               itemBuilder: (context, index) {
                 return Center(
