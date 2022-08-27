@@ -9,6 +9,14 @@ part of 'weather_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$WeatherStore on _WeatherStoreBase, Store {
+  Computed<WeatherType>? _$weatherTypeComputed;
+
+  @override
+  WeatherType get weatherType =>
+      (_$weatherTypeComputed ??= Computed<WeatherType>(() => super.weatherType,
+              name: '_WeatherStoreBase.weatherType'))
+          .value;
+
   late final _$weatherAtom =
       Atom(name: '_WeatherStoreBase.weather', context: context);
 
@@ -98,7 +106,8 @@ mixin _$WeatherStore on _WeatherStoreBase, Store {
     return '''
 weather: ${weather},
 loading: ${loading},
-error: ${error}
+error: ${error},
+weatherType: ${weatherType}
     ''';
   }
 }

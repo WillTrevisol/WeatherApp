@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -31,7 +32,7 @@ abstract class _WeatherStoreBase with Store {
         when(
           (_) => locationController.position != null, 
           () {
-            getWeatherByGps(locationController.position!);
+            getWeatherByGps();
           }
         );
       }
@@ -43,6 +44,37 @@ abstract class _WeatherStoreBase with Store {
 
   @action
   void setWeather(Weather value) => weather = value;
+
+  @computed
+  WeatherType get weatherType {
+    if (weather != null) {
+      if (weather?.conditionSlug == 'storm') {
+        return WeatherType.heavyRainy;
+      }
+
+      if (weather?.conditionSlug == 'fog') {
+        return WeatherType.foggy;
+      }
+
+      if (weather?.conditionSlug == 'clear_day') {
+        return WeatherType.sunny;
+      }
+      
+      if (weather?.conditionSlug == 'clear_night') {
+        return WeatherType.sunnyNight;
+      }
+
+      if (weather?.conditionSlug == 'cloud') {
+        return WeatherType.cloudy;
+      }
+
+      if (weather?.conditionSlug == 'cloudly_night') {
+        return WeatherType.cloudyNight;
+      }
+    }
+
+    return WeatherType.sunny;
+  }
 
   @observable
   bool loading = false;
@@ -56,11 +88,11 @@ abstract class _WeatherStoreBase with Store {
   @action
   void setError(dynamic value) => error = value;
 
-  Future<void> getWeatherByGps(Position position) async {
+  Future<void> getWeatherByGps() async {
     setError(null);
     try {
       setLoading(true);
-      final weather = await WeatherRepository().getWeatherbyGps(position);
+      final weather = await WeatherRepository().getWeatherbyGps(locationController.position!);
 
       if (weather != null) {
         setWeather(weather);

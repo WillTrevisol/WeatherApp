@@ -7,6 +7,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../stores/weather_store.dart';
 import '../my_locations/my_locations.dart';
+import 'widgets/background.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -45,11 +46,7 @@ class HomeScreen extends StatelessWidget {
                 return Stack(
                   alignment: Alignment.center,
                   children: <Widget> [
-                    WeatherBg(
-                      weatherType: WeatherType.foggy, 
-                      width: MediaQuery.of(context).size.width, 
-                      height: MediaQuery.of(context).size.height,
-                    ),
+                    BackgroundWidget(),
                     Positioned(
                       top: 50,
                       right: 10,
@@ -79,7 +76,9 @@ class HomeScreen extends StatelessWidget {
                               CupertinoIcons.refresh_bold,
                               color: Colors.white,
                             ), 
-                            onPressed: () {},
+                            onPressed: () {
+                              controller.getWeatherByGps();
+                            },
                           ),
                         ],
                       )
